@@ -15,7 +15,7 @@
                     <el-input v-model="workForm.company"></el-input>
                 </el-form-item>
                 <el-form-item label="岗位">
-                    <el-input v-model="workForm.name"></el-input>
+                    <el-input v-model="workForm.job_name"></el-input>
                 </el-form-item>
                 <el-form-item label="技能">
                     <el-input v-model="workForm.desc"></el-input>
@@ -26,8 +26,33 @@
                 <el-form-item>
                     <el-button type="primary" @click="ResetWork">重置</el-button>
                     <el-button type="primary" @click="QueryWork">立即查询</el-button>
+                    <el-input
+                    v-model="workSearh"
+                    size="mini"
+                    placeholder="输入关键字搜索"/>
                 </el-form-item>
             </el-form>
+
+            <el-table :data="workData.filter(data => !workSearh || data.company.toLowerCase().includes(workSearh.toLowerCase()))" border height="650">
+                <el-table-column prop="city" label="城市">
+
+                </el-table-column>
+                <el-table-column prop="company" label="公司">
+
+                </el-table-column>
+                <el-table-column prop="job_name" label="岗位">
+
+                </el-table-column>
+                <el-table-column prop="exp" label="经验">
+
+                </el-table-column>
+                <el-table-column prop="salary" label="薪水">
+
+                </el-table-column>
+                <el-table-column prop="link" label="快速查看">
+                </el-table-column>
+                
+            </el-table>
         </div>
         <div v-if="healthyVisible">
             <el-form label-width="120px">
@@ -52,11 +77,13 @@
             </el-card>
         </div>
         
+        
     </section>
     
 </template>
 
 <script>
+import {queryWork} from '../api/api'
 export default {
     name: "Job",
     data() {
@@ -71,10 +98,12 @@ export default {
             workForm: {
                 city: "",
                 company: "",
-                name: "",
+                job_name: "",
                 desc: "",
-                salary: 0,
-            }
+                salary: "",
+            },
+            workData: [],
+            workSearh: '',
 
         }
     },
@@ -87,10 +116,25 @@ export default {
             this.workVisible = true
         },
         ResetWork() {
-            this.workForm = Object.assign({})
+            this.workForm = Object.assign({
+                city: "",
+                company: "",
+                job_name: "",
+                desc: "",
+                salary: "",
+            })
         },
-        QueryWork() {
+        async QueryWork() {
             console.log(this.workForm)
+            let city = this.workForm.city
+            let com = this.workForm.company
+            let job = this.workForm.job_name
+            let desc = this.workForm.desc
+            let salary_list = this.workForm.salary.split('，')
+
+            let rsp = await queryWork(city, com, job, desc, parseInt(salary_list[0]), parseInt(salary_list[1]))
+            this.workData = rsp.data;
+            console.log(rsp)
         },
         OnHealthy() {
             console.log("医疗!")
