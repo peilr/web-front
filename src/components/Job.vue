@@ -7,21 +7,25 @@
             <el-col :span="6"><div class="grid-content bg-purple"><i class="el-icon-loading"></i><el-button class="bg-purple" @click="More">更多...</el-button></div></el-col>
         </el-row>
         <div v-if="workVisible">
-            <el-form label-width="120px">
+            <el-form label-width="120px" :mode="workForm">
                 <el-form-item label="城市">
-                    <el-input></el-input>
+                    <el-input v-model="workForm.city"></el-input>
                 </el-form-item>
                 <el-form-item label="公司">
-                    <el-input></el-input>
+                    <el-input v-model="workForm.company"></el-input>
                 </el-form-item>
                 <el-form-item label="岗位">
-                    <el-input></el-input>
+                    <el-input v-model="workForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="技能">
-                    <el-input></el-input>
+                    <el-input v-model="workForm.desc"></el-input>
                 </el-form-item>
                 <el-form-item label="薪资范围">
-                    <el-input></el-input>
+                    <el-input v-model="workForm.salary"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="ResetWork">重置</el-button>
+                    <el-button type="primary" @click="QueryWork">立即查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -64,6 +68,14 @@ export default {
 
             moreList: [{name:"sports", value:"football"}],
 
+            workForm: {
+                city: "",
+                company: "",
+                name: "",
+                desc: "",
+                salary: 0,
+            }
+
         }
     },
     methods: {
@@ -73,6 +85,12 @@ export default {
             this.healthyVisible = false
             this.newVisible = false
             this.workVisible = true
+        },
+        ResetWork() {
+            this.workForm = Object.assign({})
+        },
+        QueryWork() {
+            console.log(this.workForm)
         },
         OnHealthy() {
             console.log("医疗!")
