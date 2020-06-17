@@ -49,7 +49,10 @@
                 <el-table-column prop="salary" label="薪水">
 
                 </el-table-column>
-                <el-table-column prop="link" label="快速查看">
+                <el-table-column label="快速查看">
+                    <template slot-scope="scope">
+                        <a :href="scope.row.link" target="_blank">{{scope.row.link}}</a>
+                    </template>
                 </el-table-column>
                 
             </el-table>
